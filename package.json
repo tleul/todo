@@ -1,0 +1,19 @@
+{
+	"name": "to-do",
+	"version": "1.0.0",
+	"description": "Responsive simple To-do app implemented crud ",
+	"main": "index.js",
+	"directories": {
+		"lib": "lib"
+	},
+	"scripts": {
+		"nodemon": "nodemon lib/server.js"
+	},
+	"author": "Leul",
+	"license": "ISC",
+	"dependencies": {
+		"express": "^4.17.1",
+		"mongoose": "^5.9.15",
+		"nodemon": "^2.0.4"
+	}
+}
