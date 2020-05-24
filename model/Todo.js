@@ -19,3 +19,7 @@ const TodoUser = new Schema({
         type: Date
     }
 });
+
+const UserTodo = mongoose.model('UserTodo', TodoUser);
+
+module.exports = UserTodo;
