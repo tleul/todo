@@ -30,6 +30,7 @@
 		"eslint-plugin-react": "^7.20.0",
 		"express-validator": "^6.5.0",
 		"jsonwebtoken": "^8.5.1",
+		"moment": "^2.26.0",
 		"nodemon": "^2.0.4"
 	}
 }
