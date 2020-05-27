@@ -1,12 +1,12 @@
-import express from 'express';
-import UserTodo from '../../model/Todo';
+const express = require('express');
+const UserTodo = require('../model/Todo');
 
 // import moment from 'moment';
 
 const router = express.Router();
-import auth from '../middleware/auth';
+const auth = require('../middleware/auth');
 
-import { check, validationResult } from 'express-validator';
+const { check, validationResult } = require('express-validator');
 // add todo
 router.post(
 	'/',

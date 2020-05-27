@@ -1,13 +1,13 @@
-import express from 'express';
-import UserSchema from '../../model/User';
+const express = require('express');
+const UserSchema = require('../model/User');
 const bcrypt = require('bcryptjs');
-import jwt from 'jsonwebtoken';
-import config from '../config';
-import auth from '../middleware/auth';
+const jwt = require('jsonwebtoken');
+const config = require('../config/config');
+const auth = require('../middleware/auth');
 const router = express.Router();
-import UserTodo from '../../model/Todo';
+const UserTodo = require('../model/Todo');
 
-import { check, validationResult } from 'express-validator';
+const { check, validationResult } = require('express-validator');
 
 router.post(
 	'/',
