@@ -1,5 +1,5 @@
-import  jwt from 'jsonwebtoken';
-import config from '../config';
+const jwt = require('jsonwebtoken');
+const config = require('../config/config');
 
 module.exports = function (req, res, next) {
 	// Get token from header
@@ -9,10 +9,9 @@ module.exports = function (req, res, next) {
 	if (!token) {
 		return res.status(401).json({ msg: 'NO token, Authorization denied' });
 	}
-    //verify token
-    
-    try {
-       
+	//verify token
+
+	try {
 		const decoded = jwt.verify(token, config.jwtsecret);
 		req.user = decoded.user;
 		next();

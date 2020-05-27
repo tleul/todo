@@ -1,7 +1,8 @@
-import express from 'express';
-import config from './config';
+const express = require('express');
+const config = require('./config/config');
+const dbConnect = require('./config/db');
+
 // import data from './data.json';
-import dbConnect from './db';
 
 // import UserSchema from '../model/User';
 const app = express();
