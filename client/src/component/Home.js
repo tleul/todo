@@ -1,23 +1,24 @@
 import React from 'react';
 
+import { Link } from 'react-router-dom';
+
 const Home = () => {
 	return (
-		<section class='landing'>
-			<div class='dark-overlay'>
-				<div class='landing-inner'>
-					<h1 class='x-large'></h1>
-					<p class='lead' style={{ color: '#fff' }}>
+		<section className='landing'>
+			<div className='dark-overlay'>
+				<div className='landing-inner'>
+					<p className='lead' style={{ color: '#fff' }}>
 						Start creating your To Do
 					</p>
-					<div class='button'>
-						<a href='register.html' class='btn btn-primary'>
+					<div className='button'>
+						<Link to='register' className='btn btn-primary'>
 							Signup
-						</a>{' '}
+						</Link>{' '}
 						<br />
 						<br />
-						<a href='login.html' class='btn btn'>
+						<Link to='login' className='btn btn'>
 							Login
-						</a>
+						</Link>
 					</div>
 				</div>
 			</div>
