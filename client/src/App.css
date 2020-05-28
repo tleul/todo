@@ -123,8 +123,8 @@
 	transition: all 0.5s ease-in-out;
 }
 .btn.btn-primary {
-	background-color: none;
-	color: #fff;
+	background: none;
+	color: white;
 }
 
 .btn.btn-dark {
@@ -160,24 +160,29 @@
 }
 .form-group {
 	margin: 1.2rem 0;
+	color: ivory;
 }
 .form-text {
 	display: block;
 	margin-top: 0.3rem;
-	color: #999;
+	color: whitesmoke;
 }
 .form input[type='text'],
 .form input[type='email'],
 .form input[type='password'],
-.form input[type='date'],
+.form input[type='number'],
 .form select,
 .form textarea {
-	display: block;
-	width: 100%;
+	background: inherit;
+	display: flex;
+	width: auto;
 	padding: 0.4rem;
 	font-size: 1.2rem;
-	border: 1px solid #ccc;
+	border: solid;
+	border-color: darkgreen;
+	justify-content: center;
 }
+
 * {
 	box-sizing: border-box;
 	margin: 0;
@@ -188,7 +193,7 @@ body {
 	font-size: 1rem;
 	line-height: 1.6;
 	background-color: #fff;
-	color: #333;
+	color: #fff;
 }
 a {
 	text-decoration: none;
@@ -223,6 +228,19 @@ img {
 }
 .navbar a:hover {
 	color: #17a2b8;
+}
+.form-section {
+	background: url('./img/form-bg-1.jpg') no-repeat center center/cover;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-items: center;
+	height: 100vh;
+	padding: 5rem;
+}
+.form-sign:hover {
+	background-color: darkmagenta;
 }
 .landing {
 	position: relative;

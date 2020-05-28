@@ -12,13 +12,14 @@ const { check, validationResult } = require('express-validator');
 router.post(
 	'/',
 	[
-		check('name', 'Please Enter  Name').isAlpha(),
+		check('name', 'Please Enter  Name').notEmpty(),
 		check('email', 'Please Enter  Email').isEmail(),
-		check('phone', 'Please Enter  Phone').isMobilePhone(),
+		check('phone', 'Please Enter  Phone').isLength({ min: 10 }),
 	],
 
 	async (req, res) => {
 		const errors = validationResult(req);
+		console.log(errors);
 		if (!errors.isEmpty()) {
 			return res.status(400).json({ errors: errors.array() });
 		}
@@ -28,6 +29,7 @@ router.post(
 		const userExist = await UserSchema.findOne({ email });
 
 		if (userExist) {
+			console.log('error');
 			return res
 				.status(400)
 				.json({ errors: [{ msg: 'User Already Exists' }] });
@@ -41,7 +43,7 @@ router.post(
 			password,
 		});
 		const salt = await bcrypt.genSalt(10);
-		console.log(user.phone + user.password);
+
 		user.password = await bcrypt.hash(password, salt);
 
 		await user.save();
