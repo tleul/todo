@@ -244,11 +244,13 @@ img {
 }
 .landing {
 	position: relative;
+
 	background: url('./img/bg-1.jpg') no-repeat center center/cover;
 	height: 100vh;
 }
 .landing-inner {
 	color: white;
+	padding-top: 0;
 	height: 100%;
 	display: flex;
 	flex-direction: column;
