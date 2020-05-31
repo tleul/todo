@@ -4,6 +4,7 @@ import Home from './component/Home';
 import Signup from './component/auth/Signup';
 import './App.css';
 import Navbar from './component/Navbar';
+import Login from './component/auth/Login';
 
 function App() {
 	return (
@@ -13,6 +14,7 @@ function App() {
 				<Route exact path='/' component={Home} />
 				<section className='container'>
 					<Route exact path='/register' component={Signup} />
+					<Route exact path='/login' component={Login} />
 				</section>
 			</Fragment>
 		</Router>

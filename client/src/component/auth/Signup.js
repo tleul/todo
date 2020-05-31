@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react';
-// import axios from 'axios';
+
 import { Link } from 'react-router-dom';
-import API from '../../api/api';
+import register from '../../actions/register';
 
 const Signup = () => {
 	const [userData, setUserData] = useState({
@@ -16,19 +16,7 @@ const Signup = () => {
 		setUserData({ ...userData, [e.target.name]: e.target.value });
 	const onSubmit = async (e) => {
 		e.preventDefault();
-		try {
-			const body = JSON.stringify(userData);
-			const config = {
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			};
-
-			const res = await API.post('/api/register', body, config);
-			console.log(res);
-		} catch (error) {
-			console.log(error);
-		}
+		register({ name, email, phone });
 	};
 
 	return (
