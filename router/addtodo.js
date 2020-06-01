@@ -6,7 +6,23 @@ const UserTodo = require('../model/Todo');
 const router = express.Router();
 const auth = require('../middleware/auth');
 
-const { check, validationResult } = require('express-validator');
+router.get(
+	'/',
+	auth,
+
+	async (req, res) => {
+		try {
+			const userTodo = await UserTodo.findOne({ user: req.user.id });
+
+			if (!userTodo) {
+				res.json(userTodo);
+			}
+		} catch (error) {
+			console.log(error.message);
+		}
+	},
+);
+
 // add todo
 router.post(
 	'/',

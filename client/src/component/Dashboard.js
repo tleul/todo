@@ -1,46 +1,31 @@
 import React, { Fragment, useState } from 'react';
-import API from '../api/api';
+
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { connect } from 'react-redux';
+import { addtodo } from './../actions/todoaction';
+
+import { PropTypes } from 'prop-types';
 const Dashboard = (props) => {
-	const [todoForm, setTodoForm] = useState({
-		todotitle: '',
+	const [todoForm, setTodoform] = useState({
 		todotext: '',
+		todotitle: '',
 	});
 	const [startDate, setStartDate] = useState({
 		dueDate: new Date(),
 	});
+	const { todotext, todotitle } = todoForm;
+	const { dueDate } = startDate;
 
+	const onChange = (e) =>
+		setTodoform({ ...todoForm, [e.target.name]: e.target.value });
 	const handelChange = (date) => {
-		setStartDate({
-			dueDate: date,
-		});
-	};
-	const onChange = (e) => {
-		setTodoForm({
-			...todoForm,
-			[e.target.name]: e.target.value,
-		});
+		setStartDate({ dueDate: date });
 	};
 
-	const { todotext, todotitle } = JSON.stringify(todoForm);
-	const body = { ...todoForm, ...startDate };
 	const onSubmit = async (e) => {
 		e.preventDefault();
-
-		try {
-			const config = {
-				headers: {
-					'Content-Type': 'application/json',
-					'x-auth-token': localStorage.getItem('token'),
-				},
-			};
-
-			const res = await API.post('/api/addtodo', body, config);
-			console.log(res);
-		} catch (error) {
-			console.log(error);
-		}
+		props.addtodo({ todotitle, todotext, dueDate });
 	};
 
 	const createToDo = (
@@ -49,6 +34,7 @@ const Dashboard = (props) => {
 				<br />
 				<br />
 				<br />
+				<p></p>
 				<form className='form' onSubmit={(e) => onSubmit(e)}>
 					<div className='form-group'>
 						<input
@@ -98,7 +84,8 @@ const Dashboard = (props) => {
 					<br />
 					<br />
 					<br />
-					{props.state.isAut ? (
+					<Fragment>{createToDo}</Fragment>
+					{/* {props.state.isAut ? (
 						<Fragment>
 							<p className='lead' style={{ color: '#fff' }}>
 								'here is your list'
@@ -106,11 +93,13 @@ const Dashboard = (props) => {
 						</Fragment>
 					) : (
 						createToDo
-					)}
+					)} */}
 				</div>
 			</div>
 		</section>
 	);
 };
-
-export default Dashboard;
+Dashboard.propType = {
+	Dashboard: PropTypes.func.isRequired,
+};
+export default connect(null, { addtodo })(Dashboard);
