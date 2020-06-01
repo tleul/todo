@@ -1,12 +1,18 @@
-import React, { Fragment } from 'react';
-import { Link } from 'react-dom';
+import React, { Fragment, useState } from 'react';
+
+import login from '../../actions/login';
 const Login = () => {
-	// const onChange = (e) =>
-	// 	setUserData({ ...userData, [e.target.name]: e.target.value });
-	// const onSubmit = async (e) => {
-	// 	e.preventDefault();
-	// 	register({ name, email, phone });
-	// };
+	const [authData, setAuthdata] = useState({
+		email: '',
+		password: '',
+	});
+	const { email, password } = authData;
+	const onChange = (e) =>
+		setAuthdata({ ...authData, [e.target.name]: e.target.value });
+	const onSubmit = async (e) => {
+		e.preventDefault();
+		login({ email, password });
+	};
 
 	return (
 		<Fragment>
@@ -14,14 +20,14 @@ const Login = () => {
 				<p className='lead' style={{ color: 'white' }}>
 					<i className='fas fa-user'></i> Login to Your Account
 				</p>
-				<form className='form'>
+				<form className='form' onSubmit={(e) => onSubmit(e)}>
 					<div className='form-group'>
 						<input
 							autoComplete='new-email'
 							type='email'
 							placeholder='Email Address'
-							// value={email}
-							// onChange={(e) => onChange(e)}
+							value={email}
+							onChange={(e) => onChange(e)}
 							name='email'
 							required
 						/>
@@ -34,8 +40,8 @@ const Login = () => {
 							placeholder='Pasword'
 							name='password'
 							minLength='4'
-							// value={password}
-							// onChange={(e) => onChange(e)}
+							value={password}
+							onChange={(e) => onChange(e)}
 							required
 						/>
 					</div>

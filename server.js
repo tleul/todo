@@ -20,7 +20,7 @@ app.use((req, res, next) => {
 	res.header('Access-Control-Allow-Origin', '*');
 	res.header(
 		'Access-Control-Allow-Headers',
-		'Origin, X-Requested-With, Content-Type, Accept',
+		'Origin, X-Requested-With, Content-Type, Accept, x-auth-token',
 	);
 	next();
 });
@@ -31,6 +31,7 @@ app.get('/', (req, res) => {
 app.use('/api/register', require('./router/register'));
 app.use('/api/signin', require('./router/auth'));
 app.use('/api/addtodo', require('./router/addtodo'));
+app.use('/api/todolist', require('./router/getAllTodo'));
 
 // app.use('/api', require('./router/register'));
 // app.use('api');

@@ -22,7 +22,7 @@ const TodoUser = new Schema({
 				default: Date.now,
 			},
 			dueDate: {
-				type: Date,
+				type: String,
 				required: true,
 			},
 		},
