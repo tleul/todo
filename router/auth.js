@@ -59,6 +59,7 @@ router.post(
 						throw err;
 					}
 					res.json({ token });
+					console.log(token);
 				},
 			);
 		} catch (err) {
