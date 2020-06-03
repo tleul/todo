@@ -1,10 +1,10 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import { logout } from '../actions/auth';
-const Navbar = ({ userData, isAuthenticated, logout }) => {
+const Navbar = ({ isAuthenticated, logout, user }) => {
 	const userPage = (
 		<ul>
 			<li>
@@ -30,7 +30,7 @@ const Navbar = ({ userData, isAuthenticated, logout }) => {
 			<h1>
 				<Link to='/'>
 					<i className='fas fa-house-user'></i>Welcome{' '}
-					{isAuthenticated ? userData.name : ''}
+					{user && user.name}
 				</Link>
 			</h1>
 			<ul>
@@ -43,10 +43,12 @@ Navbar.propTypes = {
 	userData: PropTypes.object,
 	isAuthenticated: PropTypes.bool,
 	logout: PropTypes.func.isRequired,
+	user: PropTypes.object,
 };
 const mapStateToProps = (state) => ({
 	userData: state.auth.userData,
 	isAuthenticated: state.auth.isAuthenticated,
+	user: state.auth.user,
 });
 
 export default connect(mapStateToProps, { logout })(Navbar);
