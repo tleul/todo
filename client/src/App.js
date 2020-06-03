@@ -11,20 +11,22 @@ import Dashboard from './component/Dashboard';
 import { Provider } from 'react-redux';
 import store from './store';
 import { loaduser } from './actions/auth';
-
+import setauthToken from './api/setToken';
+if (localStorage.token) {
+	setauthToken(localStorage.token);
+}
 const App = () => {
 	useEffect(() => {
 		if (localStorage.token) {
 			store.dispatch(loaduser());
 		}
 	});
-
 	return (
 		<Provider store={store}>
 			<Router>
 				<Navbar />
 				<Route exact path='/' component={Home} />
-				<section>
+				<section className='container'>
 					<Switch>
 						<Route exact path='/register' component={Signup} />
 						<Route exact path='/Login' component={Login} />
