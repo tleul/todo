@@ -1,116 +1,128 @@
-import React, { Fragment, useState } from 'react';
-import API from '../api/api';
+import React, { Fragment, useState, useEffect } from 'react';
+
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-const Dashboard = (props) => {
-	const [todoForm, setTodoForm] = useState({
-		todotitle: '',
+import { connect } from 'react-redux';
+import { gettodo, addtodo } from './../actions/todoaction';
+
+import { PropTypes } from 'prop-types';
+import { Redirect } from 'react-router-dom';
+
+import TodoList from './TodoList';
+const Dashboard = ({
+	loading,
+	gettodo,
+	todo,
+	user,
+	addtodo,
+	isAuthenticated,
+}) => {
+	const [displayTodo, toggleTodo] = useState(true);
+	const [todoForm, setTodoform] = useState({
 		todotext: '',
+		todotitle: '',
 	});
 	const [startDate, setStartDate] = useState({
 		dueDate: new Date(),
 	});
+	const { todotext, todotitle } = todoForm;
+	const { dueDate } = startDate;
 
+	const onChange = (e) =>
+		setTodoform({ ...todoForm, [e.target.name]: e.target.value });
 	const handelChange = (date) => {
-		setStartDate({
-			dueDate: date,
-		});
-	};
-	const onChange = (e) => {
-		setTodoForm({
-			...todoForm,
-			[e.target.name]: e.target.value,
-		});
+		setStartDate({ dueDate: date });
 	};
 
-	const { todotext, todotitle } = JSON.stringify(todoForm);
-	const body = { ...todoForm, ...startDate };
 	const onSubmit = async (e) => {
 		e.preventDefault();
-
-		try {
-			const config = {
-				headers: {
-					'Content-Type': 'application/json',
-					'x-auth-token': localStorage.getItem('token'),
-				},
-			};
-
-			const res = await API.post('/api/addtodo', body, config);
-			console.log(res);
-		} catch (error) {
-			console.log(error);
-		}
+		addtodo({ todotitle, todotext, dueDate });
 	};
+
+	useEffect(() => {
+		gettodo();
+	}, [gettodo]);
 
 	const createToDo = (
 		<Fragment>
-			<div>
-				<br />
-				<br />
-				<br />
-				<form className='form' onSubmit={(e) => onSubmit(e)}>
-					<div className='form-group'>
+			<section className='landing'>
+				<div className='landing-inner'>
+					<form className='form' onSubmit={(e) => onSubmit(e)}>
 						<input
-							type='text'
-							placeholder='Name Your TODO'
-							name='todotitle'
-							value={todotitle}
-							onChange={(e) => onChange(e)}
+							type='submit'
+							value='show my TODO'
+							onClick={(e) => toggleTodo(!displayTodo)}
+							className='btn'
 						/>
-						<small className='form-text'>
-							Naming your todo will help you to recognise each
-							todo
-						</small>
-					</div>
-					<div className='form-group'>
-						<input
-							type='text'
-							placeholder='TODO Discription '
-							value={todotext}
-							onChange={(e) => onChange(e)}
-							name='todotext'
-						/>
-						<small className='form-text'>
-							Discribe in good way, help you not to miss nothing
-						</small>
-					</div>
-					<div className='form-group'>
-						<DatePicker
-							selected={startDate.dueDate}
-							onChange={(date) => handelChange(date)}
-						/>
-						<small className='form-text'>
-							When do you want to complete(i will give you a heads
-							up)
-						</small>
-					</div>
-					<input type='submit' className='btn btn-primary my-1' />
-				</form>
-			</div>
+						<p style={{ color: 'blue' }} className='lead'>
+							You Have {loading && todo ? todo.todo.length : 'No'}{' '}
+							Todo
+						</p>
+						<div className='form-group'>
+							<input
+								type='text'
+								placeholder='Name Your TODO'
+								name='todotitle'
+								value={todotitle}
+								onChange={(e) => onChange(e)}
+							/>
+							<small className='form-text'>
+								Naming your todo will help you to recognise each
+								todo
+							</small>
+						</div>
+						<div className='form-group'>
+							<input
+								type='text'
+								placeholder='TODO Discription '
+								value={todotext}
+								onChange={(e) => onChange(e)}
+								name='todotext'
+							/>
+							<small className='form-text'>
+								Discribe in good way, help you not to miss
+								nothing
+							</small>
+						</div>
+						<div className='datePicker'>
+							{' '}
+							<DatePicker
+								selected={startDate.dueDate}
+								onChange={(date) => handelChange(date)}
+							/>
+							<small className='form-text'>
+								When do you want to complete(i will give you a
+								heads up)
+							</small>
+						</div>
+						<input type='submit' className='btn' />
+					</form>
+				</div>
+			</section>
 		</Fragment>
 	);
+	if (!isAuthenticated) {
+		return <Redirect to='/' />;
+	}
 
 	return (
-		<section style={{ alignContent: 'center' }} className='landing'>
-			<div className='dark-overlay'>
-				<div className='landing-inner'>
-					<br />
-					<br />
-					<br />
-					{props.state.isAut ? (
-						<Fragment>
-							<p className='lead' style={{ color: '#fff' }}>
-								'here is your list'
-							</p>
-						</Fragment>
-					) : (
-						createToDo
-					)}
-				</div>
-			</div>
-		</section>
+		loading && (
+			<Fragment>
+				<Fragment>{displayTodo ? createToDo : <TodoList />}</Fragment>
+			</Fragment>
+		)
 	);
 };
-
-export default Dashboard;
+Dashboard.propType = {
+	gettodo: PropTypes.func.isRequired,
+	addtodo: PropTypes.func.isRequired,
+	todo: PropTypes.object,
+	loading: PropTypes.bool,
+	isAuthenticated: PropTypes.bool.isRequired,
+};
+const mapStateToProps = (state) => ({
+	loading: state.todo.loading,
+	todo: state.todo.todo,
+	isAuthenticated: state.auth.isAuthenticated,
+});
+export default connect(mapStateToProps, { gettodo, addtodo })(Dashboard);

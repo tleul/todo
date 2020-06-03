@@ -1,9 +1,11 @@
 import React, { Fragment, useState } from 'react';
 
-import { Link } from 'react-router-dom';
-import register from '../../actions/register';
+import { Link, Redirect } from 'react-router-dom';
+import { register } from '../../actions/auth';
+import { connect } from 'react-redux';
 
-const Signup = () => {
+import { PropTypes } from 'prop-types';
+const Signup = (props) => {
 	const [userData, setUserData] = useState({
 		name: '',
 		email: '',
@@ -12,13 +14,17 @@ const Signup = () => {
 
 	const { name, email, phone } = userData;
 
-	const onChange = (e) =>
+	const onChange = (e) => {
 		setUserData({ ...userData, [e.target.name]: e.target.value });
-	const onSubmit = async (e) => {
-		e.preventDefault();
-		register({ name, email, phone });
 	};
 
+	const onSubmit = async (e) => {
+		e.preventDefault();
+		props.register({ name, email, phone });
+	};
+	if (props.isAuthenticated) {
+		return <Redirect to='/dashboard' />;
+	}
 	return (
 		<Fragment>
 			<section className='form-section'>
@@ -80,4 +86,11 @@ const Signup = () => {
 	);
 };
 
-export default Signup;
+register.propTypes = {
+	register: PropTypes.func.isRequired,
+	isAuthenticated: PropTypes.bool,
+};
+const mapStateToProps = (state) => ({
+	isAuthenticated: state.auth.isAuthenticated,
+});
+export default connect(mapStateToProps, { register })(Signup);
