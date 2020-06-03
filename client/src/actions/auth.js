@@ -7,25 +7,25 @@ import {
 	REGISTERSUCCESS,
 	LOADUSER,
 	LOGOUT,
+	LOADUSER_FAIL,
+	CLEAR_TODO,
 } from './types';
-export const loaduser = () => async (dispatch) => {
-	const config = {
-		headers: {
-			'Content-Type': 'application/json',
-			'x-auth-token': localStorage.token,
-		},
-	};
 
+import setauthToken from './../api/setToken';
+export const loaduser = () => async (dispatch) => {
+	if (localStorage.token) {
+		setauthToken(localStorage.token);
+	}
 	try {
-		const res = await API.get('/api/signin', config);
+		const res = await API.get('/signin');
 		dispatch({
 			type: LOADUSER,
-			payload: localStorage.token,
-			userData: res.data,
+			payload: res.data,
 		});
-		return res.data;
 	} catch (error) {
-		console.log('no user found');
+		dispatch({
+			type: LOADUSER_FAIL,
+		});
 	}
 };
 export const login = ({ email, password }) => async (dispatch) => {
@@ -37,21 +37,12 @@ export const login = ({ email, password }) => async (dispatch) => {
 			},
 		};
 
-		const res = await API.post('/api/signin', body, config);
-		const token = res.data.token;
-		console.log(token);
-		const getConfig = {
-			headers: {
-				'Content-Type': 'application/json',
-				'x-auth-token': token,
-			},
-		};
-		const userData = await API.get('/api/signin', getConfig);
+		const res = await API.post('/signin', body, config);
+		console.log(res.data);
 
 		dispatch({
 			type: LOGINSUCCESS,
 			payload: res.data,
-			userData: userData,
 		});
 		dispatch(loaduser());
 	} catch (error) {
@@ -70,13 +61,12 @@ export const register = ({ name, email, phone }) => async (dispatch) => {
 			},
 		};
 
-		const res = await API.post('/api/register', body, config);
-		console.log(res);
+		const res = await API.post('/register', body, config);
+
 		dispatch({
 			type: REGISTERSUCCESS,
 			payload: res.data,
 		});
-		dispatch(loaduser());
 	} catch (error) {
 		console.log(error);
 		dispatch({
@@ -88,5 +78,8 @@ export const logout = () => (dispatch) => {
 	console.log('clicked');
 	dispatch({
 		type: LOGOUT,
+	});
+	dispatch({
+		type: CLEAR_TODO,
 	});
 };
