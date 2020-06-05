@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
-import { logout } from '../actions/auth';
+import { logout } from '../../actions/auth';
 const Navbar = ({ isAuthenticated, logout, user }) => {
 	const userPage = (
 		<ul>
@@ -30,7 +30,7 @@ const Navbar = ({ isAuthenticated, logout, user }) => {
 			<h1>
 				<Link to='/'>
 					<i className='fas fa-house-user'></i>Welcome{' '}
-					{user && user.name}
+					{isAuthenticated ? user.name : ''}
 				</Link>
 			</h1>
 			<ul>
@@ -40,13 +40,11 @@ const Navbar = ({ isAuthenticated, logout, user }) => {
 	);
 };
 Navbar.propTypes = {
-	userData: PropTypes.object,
 	isAuthenticated: PropTypes.bool,
 	logout: PropTypes.func.isRequired,
 	user: PropTypes.object,
 };
 const mapStateToProps = (state) => ({
-	userData: state.auth.userData,
 	isAuthenticated: state.auth.isAuthenticated,
 	user: state.auth.user,
 });
