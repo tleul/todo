@@ -14,12 +14,8 @@ router.get(
 		try {
 			const userTodo = await UserTodo.findOne({ user: req.user.id });
 
-			if (!userTodo) {
-				res.json(userTodo);
-			}
-		} catch (error) {
-			console.log(error.message);
-		}
+			res.json(userTodo.todo);
+		} catch (error) {}
 	},
 );
 
@@ -45,12 +41,13 @@ router.post(
 					todo: newtodo,
 				});
 				const todoUser = await userTodo.save();
-				return res.json(todoUser);
+				return res.json(todoUser.todo);
 			}
 			userTodo.todo.unshift(newtodo);
 
 			const todoUser = await userTodo.save();
-			return res.json(todoUser);
+			console.log(todoUser.todo);
+			res.json(todoUser.todo);
 		} catch (error) {
 			console.log(error.message);
 		}
@@ -60,6 +57,7 @@ router.post(
 //Remove todo
 router.delete('/:id', auth, async (req, res) => {
 	try {
+		console.log(req.params.id);
 		const usertodo = await UserTodo.findOne({ user: req.user.id });
 
 		const removeIndex = usertodo.todo
@@ -67,8 +65,8 @@ router.delete('/:id', auth, async (req, res) => {
 			.indexOf(req.params.id);
 
 		usertodo.todo.splice(removeIndex, 1);
-		await usertodo.save();
-		res.json(usertodo);
+		userTodo = await usertodo.save();
+		res.json(usertodo.todo);
 	} catch (error) {
 		console.log(error.message);
 	}
