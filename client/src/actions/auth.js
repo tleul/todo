@@ -9,15 +9,19 @@ import {
 	LOGOUT,
 	LOADUSER_FAIL,
 	CLEAR_TODO,
+	GETTODO,
 } from './types';
 
 import setauthToken from './../api/setToken';
+import { gettodo } from './todoaction';
 export const loaduser = () => async (dispatch) => {
 	if (localStorage.token) {
 		setauthToken(localStorage.token);
 	}
+
 	try {
 		const res = await API.get('/signin');
+
 		dispatch({
 			type: LOADUSER,
 			payload: res.data,
@@ -45,6 +49,7 @@ export const login = ({ email, password }) => async (dispatch) => {
 			payload: res.data,
 		});
 		dispatch(loaduser());
+		dispatch(gettodo());
 	} catch (error) {
 		console.log(error);
 		dispatch({
@@ -67,6 +72,7 @@ export const register = ({ name, email, phone }) => async (dispatch) => {
 			type: REGISTERSUCCESS,
 			payload: res.data,
 		});
+		dispatch(loaduser());
 	} catch (error) {
 		console.log(error);
 		dispatch({
